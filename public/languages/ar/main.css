@@ -441,15 +441,15 @@ ul#tab_media_center {
         height: 100%;
         background: white; }
     ul#tab_media_center li#image a span {
-      background: url(/images/mc_nav_images.gif) right top no-repeat; }
+      background: url(/languages/ar/images/mc_nav_images.gif) right top no-repeat; }
     ul#tab_media_center li#sounds a span {
       background: url(/images/mc_nav_sounds.gif) right top no-repeat; }
     ul#tab_media_center li#maps a span {
       background: url(/images/mc_nav_maps.gif) right top no-repeat; }
     ul#tab_media_center li#videos a span {
-      background: url(/images/mc_nav_videos.gif) right top no-repeat; }
+      background: url(/languages/ar/images/mc_nav_videos.gif) right top no-repeat; }
     ul#tab_media_center li#taxa-comments a span {
-      background: url(/images/mc_nav_comments.gif) right top no-repeat; }
+      background: url(/languages/ar/images/mc_nav_comments.gif) right top no-repeat; }
     ul#tab_media_center li#image a:hover span, ul#tab_media_center li#sounds a:hover span, ul#tab_media_center li#maps a:hover span, ul#tab_media_center li#videos a:hover span, ul#tab_media_center li#taxa-comments a:hover span {
       background-position: right -30px; }
     ul#tab_media_center li#image a.active span, ul#tab_media_center li#sounds a.active span, ul#tab_media_center li#maps a.active span, ul#tab_media_center li#videos a.active span, ul#tab_media_center li#taxa-comments a.active span {

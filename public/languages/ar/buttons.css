@@ -16,13 +16,13 @@
   background: url(/images/link_cite.gif) no-repeat; }
 
 ul#tab_media_center li#image a span {
-  background: url(/images/mc_nav_images.gif) left top no-repeat; }
+  background: url(/languages/ar/images/mc_nav_images.gif) left top no-repeat; }
 ul#tab_media_center li#sounds a span {
-  background: url(/images/mc_nav_sounds.gif) left top no-repeat; }
+  background: url(/languages/images/mc_nav_sounds.gif) left top no-repeat; }
 ul#tab_media_center li#maps a span {
-  background: url(/images/mc_nav_maps.gif) left top no-repeat; }
+  background: url(/languages/images/mc_nav_maps.gif) left top no-repeat; }
 ul#tab_media_center li#videos a span {
-  background: url(/images/mc_nav_videos.gif) left top no-repeat; }
+  background: url(/languages/ar/images/mc_nav_videos.gif) left top no-repeat; }
 
 .search_image {
   background: url(/images/fc_find.gif) left top no-repeat;
