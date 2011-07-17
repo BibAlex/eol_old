@@ -879,12 +879,12 @@ class DataObject < SpeciesSchemaModel
       if entry_in_hierarchy = taxon_concept.entry(options[:filter_hierarchy], true)
         HierarchyEntry.preload_associations(entry_in_hierarchy,
           [ :top_images => :data_object ],
-          :select => { :data_objects => [ :id, :data_type_id, :vetted_id, :visibility_id, :published, :guid, :data_rating ] } )
+          :select => { :data_objects => [ :id, :data_type_id, :vetted_id, :visibility_id, :published, :guid, :data_rating, :language_id ] } )
         image_data_objects = entry_in_hierarchy.top_images.collect{ |ti| ti.data_object }
         if show_unpublished
           HierarchyEntry.preload_associations(entry_in_hierarchy,
             [ :top_unpublished_images => :data_object ],
-            :select => { :data_objects => [ :id, :data_type_id, :vetted_id, :visibility_id, :published, :guid, :data_rating ] } )
+            :select => { :data_objects => [ :id, :data_type_id, :vetted_id, :visibility_id, :published, :guid, :data_rating, :language_id ] } )
           image_data_objects += entry_in_hierarchy.top_unpublished_images.collect{ |ti| ti.data_object }
         end
       end
@@ -903,7 +903,7 @@ class DataObject < SpeciesSchemaModel
         TaxonConcept.preload_associations(taxon_concept,
           [ :top_unpublished_concept_images => { :data_object => { :hierarchy_entries => { :hierarchy => :agent } } } ],
           :select => {
-            :data_objects => [ :id, :data_type_id, :vetted_id, :visibility_id, :published, :guid, :data_rating ],
+            :data_objects => [ :id, :data_type_id, :vetted_id, :visibility_id, :published, :guid, :data_rating, :language_id ],
             :hierarchy_entries => :hierarchy_id,
             :agents => [:id, :full_name, :homepage, :logo_cache_url] } )
         image_data_objects += taxon_concept.top_unpublished_concept_images.collect{ |tci| tci.data_object }
@@ -1102,5 +1102,45 @@ class DataObject < SpeciesSchemaModel
   def translated_from
     data_object_translation ? data_object_translation.original_data_object : nil
   end
+  
+  def translation_source
+    org_tr = DataObjectTranslation.find_by_data_object_id(self.id)
+    if org_tr
+      return  org_tr.original_data_object     
+    else
+      return nil 
+    end
+  end
+  
+  def available_translation_languages
+    lang_ids = []
+    if !translations.empty?
+      lang_ids << language_id
+      translations.each do |tr| 
+        lang_ids << tr.data_object.language_id
+      end
+    else       
+      org_tr = DataObjectTranslation.find_by_data_object_id(self.id)
+      if org_tr
+        org_dobj = org_tr.original_data_object
+        lang_ids << org_dobj.language_id
+        org_dobj.translations.each do |tr|
+          lang_ids << tr.data_object.language_id
+        end
+      end      
+    end
+    
+    if !lang_ids.empty? && lang_ids.length>1
+      str = "0"
+      lang_ids.each do |id|
+        str = str + "," + id.to_s
+      end
+      return Language.find_by_sql("SELECT * FROM languages WHERE id IN (#{str}) AND activated_on <= '#{Time.now.to_s}' ORDER BY sort_order")
+    end
+    return nil
+      
+  end  
+  
+  
 
 end

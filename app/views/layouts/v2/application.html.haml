@@ -55,7 +55,9 @@
               -# FIXME: Fix this so it gets currently selected language easily from controller?
               -# FIXME: Where should this link go? To separate 'select language' page?
               - link_to "#" do
-                %span Language: EN
+                %span 
+                  = I18n.t(:language)                  
+                  = I18n.locale
             %ul
               - Language.find_active.each do |language|
                 %li
