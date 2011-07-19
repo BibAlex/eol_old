@@ -1144,15 +1144,17 @@ class DataObject < SpeciesSchemaModel
   
   def available_translation_languages(current_user)
     dobjs = available_translations_data_objects(current_user)
-    lang_ids = []
-    dobjs.each do |dobj| 
-      lang_ids << dobj.language_id
-    end    
-
-    lang_ids = lang_ids.uniq
-    if !lang_ids.empty? && lang_ids.length>1
-      languages = Language.find_by_sql("SELECT * FROM languages WHERE id in (#{lang_ids.join(',')}) AND activated_on <= NOW() ORDER BY sort_order")      
-      return languages
+    if dobjs and !dobjs.empty?    
+      lang_ids = []
+      dobjs.each do |dobj| 
+        lang_ids << dobj.language_id
+      end    
+  
+      lang_ids = lang_ids.uniq
+      if !lang_ids.empty? && lang_ids.length>1
+        languages = Language.find_by_sql("SELECT * FROM languages WHERE id in (#{lang_ids.join(',')}) AND activated_on <= NOW() ORDER BY sort_order")      
+        return languages
+      end
     end
     return nil     
 

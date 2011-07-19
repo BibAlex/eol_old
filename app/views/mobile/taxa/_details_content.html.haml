@@ -8,7 +8,7 @@
           //%p= link_to I18n.t("#{en_type}_more_about"), data_object_path(dato)
         - unless dato.object_title.blank?
           %h4= dato.object_title
-        = render :partial => 'data_objects/data_object_article', :locals => { :data_object => dato }
+        = render :partial => 'data_objects/data_object_article', :locals => { :data_object => dato, :show_view_source => 'true' }
         //= render :partial => "feed_items/form", :locals => { :feed_item => FeedItem.new(:feed_id => dato.id, :feed_type => dato.class.name) }
   - else
     .article.copy

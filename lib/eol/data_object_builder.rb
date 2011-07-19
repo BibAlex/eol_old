@@ -49,6 +49,7 @@ module EOL
       @type = type
       data_object_gen_options = pull_class_options_from(options)
       gen_opts = dynamic_attributes(desc).merge(data_object_gen_options)
+      # gen_opts[:language] ||= Language.english
       @dato = DataObject.gen(gen_opts)
       build
     end

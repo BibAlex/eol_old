@@ -46,12 +46,12 @@ body > #header a {
 body > #header h1 {
   position: absolute;
   right: 0;
-  top: 20px;
+  top: 13px;
   z-index: 2; }
   body > #header h1 a {
     display: block;
     width: 125px;
-    height: 78px;
+    height: 92px;
     text-indent: -8685px;
     text-decoration: none;
     overflow: hidden;

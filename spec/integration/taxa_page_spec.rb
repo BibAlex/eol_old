@@ -27,6 +27,7 @@ describe 'Taxa page' do
 
   shared_examples_for 'taxon pages with all expected data' do
     it 'should show the taxon name and section name' do
+      puts @testy[:taxon_concept].id
       body.should have_tag('#page_heading h1', /#{@testy[:taxon_concept].title_canonical}\n*?.*?#{@section}/i)
     end
     it 'should show the preferred common name' do

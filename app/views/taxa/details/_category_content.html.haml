@@ -17,7 +17,7 @@
           - tr_source = dato.translation_source
           - if tr_source
             %p.last= link_to I18n.t(:view_translation_source_link), set_language_url(:language => tr_source.language.iso_639_1)+"&return_to=/data_objects/#{tr_source.id}"
-        = render :partial => 'data_objects/data_object_article', :locals => { :data_object => dato }
+        = render :partial => 'data_objects/data_object_article', :locals => { :data_object => dato, :show_view_source => 'false' }
         .meta.attribution
           = render :partial => 'data_objects/attribution_minimal', :locals => { :data_object => dato }
         = render :partial => 'data_objects/rating', :locals => { :data_object => dato }
