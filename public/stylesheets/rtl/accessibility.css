@@ -1,3 +1,11 @@
+.scientific_name {
+  direction: ltr;
+  text-align: right; }
+
+.reference_table {
+  direction: ltr;
+  text-align: left; }
+
 .assistive, #header .assistive {
   position: absolute;
   right: -999em; }
@@ -662,6 +670,7 @@ body > #header .section .session.join {
  * so we can't re-use HR SASS as it is - we need to refactor markup and SASS so we can share SASS or create mixin.
  */
 #classification_browser {
+  direction: ltr;
   border: 1px solid #d7dadc;
   overflow-x: auto;
   padding: 10px 15px;
@@ -672,7 +681,7 @@ body > #header .section .session.join {
     #classification_browser > ul li {
       white-space: nowrap; }
       #classification_browser > ul li ul {
-        margin-right: 10px; }
+        margin-left: 10px; }
 
 #classification_browser .open, .classifications .open {
   font-weight: bold; }
@@ -1194,3 +1203,9 @@ body#prelaunch p.status {
 
 body#prelaunch #footer ul.social_media {
   margin-top: 20px; }
+
+#classifications_summary ul li ul {
+  direction: ltr; }
+  #classifications_summary ul li ul li.showtree {
+    direction: rtl;
+    text-align: left; }

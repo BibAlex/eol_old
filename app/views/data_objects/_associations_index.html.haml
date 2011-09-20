@@ -8,7 +8,7 @@
   - if entries.compact.blank?
     %p= I18n.t(:data_object_not_associated_with_any_hierarchies)
   - else
-    %ul.review_status
+    %ul.review_status.scientific_name
       - entries.each do |entry|
         - next if entry.nil?
         - en_status = entry.vetted.label('en').downcase

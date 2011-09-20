@@ -25,6 +25,14 @@ address {
 header, section, article, nav, footer, hgroup {
   display: block; }
 
+.scientific_name {
+  direction: ltr;
+  text-align: right; }
+
+.reference_table {
+  direction: ltr;
+  text-align: left; }
+
 body {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 75%;
@@ -736,8 +744,7 @@ table.standard {
     table.standard thead tr th {
       background: #eff2f4;
       padding: 5px 20px;
-      font-weight: bold;
-      text-align: right; }
+      font-weight: bold; }
   table.standard tbody tr {
     border: 1px solid #cad3db; }
     table.standard tbody tr td {
@@ -1960,7 +1967,7 @@ body > #header {
           #taxon + #sidebar .classifications > ul > li h4 a {
             font-weight: bold; }
         #taxon + #sidebar .classifications > ul > li ul {
-          margin-right: 10px; }
+          margin-left: 10px; }
     #taxon + #sidebar .updates ul {
       border-bottom: 1px solid #d7dadc; }
     #taxon + #sidebar .updates form.comment {

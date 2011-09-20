@@ -732,6 +732,7 @@ body
   * so we can't re-use HR SASS as it is - we need to refactor markup and SASS so we can share SASS or create mixin.
   **/
 #classification_browser
+  direction: ltr
   border: 1px solid #D7DADC
   overflow-x: auto
   padding: 10px 15px
@@ -742,7 +743,7 @@ body
     li
       white-space: nowrap
       ul
-        margin-right: 10px
+        margin-left: 10px
 #classification_browser, .classifications
   .open
     font-weight: bold
@@ -1264,3 +1265,19 @@ body#prelaunch
 // Preview page fix:
 body#prelaunch #footer ul.social_media
   margin-top: 20px
+
+//set scientifc names to be LRT
+#classifications_summary
+  ul
+    li
+      ul
+        direction: ltr
+        li
+          &.showtree
+            direction: rtl
+            text-align: left
+
+
+
+
+    

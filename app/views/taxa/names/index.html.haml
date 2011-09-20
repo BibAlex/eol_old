@@ -15,7 +15,7 @@
       - else
         - ['parents', 'children'].each do |type|
           - unless @related_names[type].blank?
-            %table.standard.related_names
+            %table.standard.related_names.reference_table
               %thead
                 %tr
                   %th= I18n.t("names_#{type}_column_header")
