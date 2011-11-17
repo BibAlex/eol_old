@@ -20,7 +20,9 @@ module EOL
       end
 
       def start_to_index_collection_items
+        puts "start"
         start = CollectionItem.first.id
+        puts start
         max_id = CollectionItem.last.id
         limit = 5000
         i = start
