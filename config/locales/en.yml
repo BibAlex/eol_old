@@ -163,6 +163,8 @@ en:
       collection_item:
         annotation: "Annotation"
         sort_field: "Sort by"
+        collection_item_date: "Date"
+        refs: "References <small>(put each reference on a new line)</small>"
       comment:
         body: "Comment"
       content_page:
@@ -254,7 +256,10 @@ en:
         name: Collection name
         description: Collection description
         sort_style_id: Default sorting direction
+        collection_date: Date (YYYY-MM-DD)
         logo: Primary collection image
+        refs: "References <small>(put each reference on a new line)</small>"
+        additional_annotation_fields: "Additional annotation fields"
       community:
         name: Community name
         description: Community description
@@ -2671,3 +2676,4 @@ en:
   user_hidden_message: "This user is no longer active"
   no_answer: "No"
   allowed_html_tags: "Only these tags are allowed:"
+  references_cabs: "References:"

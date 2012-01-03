@@ -82,8 +82,32 @@ class CollectionsController < ApplicationController
     return remove_and_redirect if params[:commit_remove]
     return annotate if params[:commit_annotation]
     return chosen if params[:scope] # Note that updating the collection params doesn't specify a scope.
+    
+    params[:collection][:collection_date] = nil if params[:has_date].nil?
+    
+    
     if @collection.update_attributes(params[:collection])
       upload_logo(@collection) unless params[:collection][:logo].blank?
+      @references = params[:references] # we'll need these if validation fails and we re-render new
+      params[:references] = params[:references].split("\n") unless params[:references].blank?
+      
+      @collection.refs.clear
+      unless params[:has_refs].nil?
+        unless params[:references].blank?
+          params[:references].each do |reference|
+            if reference.strip != ''
+              reference = reference.downcase
+              ref = Ref.find_by_full_reference_and_user_submitted_and_published_and_visibility_id(reference, 1, 1, Visibility.visible.id)
+              if (ref)
+                @collection.refs << ref
+              else
+                @collection.refs << Ref.new(:full_reference => reference, :user_submitted => true, :published => 1, :visibility => Visibility.visible)  
+              end
+              
+            end
+          end
+        end
+      end
       flash[:notice] = I18n.t(:collection_updated_notice, :collection_name => @collection.name) if
         params[:collection] # NOTE - when we sort, we don't *actually* update params...
       redirect_to params.merge!(:action => 'show').except(*unnecessary_keys_for_redirect)
@@ -359,6 +383,25 @@ private
 
   def annotate
     if @collection.update_attributes(params[:collection])
+      @collection_item = CollectionItem.find(params[:collection][:collection_items_attributes].keys.map {|i|
+            params[:collection][:collection_items_attributes][i][:id] }.first)
+      @collection_item.refs.clear
+      @references = params[:references] # we'll need these if validation fails and we re-render new
+      params[:references] = params[:references].split("\n") unless params[:references].blank?
+            
+      unless params[:references].blank?        
+        params[:references].each do |reference|
+          if reference.strip != ''
+            reference = reference.downcase
+            ref = Ref.find_by_full_reference_and_user_submitted_and_published_and_visibility_id(reference, 1, 1, Visibility.visible.id)
+            if (ref)
+              @collection_item.refs << ref
+            else
+              @collection_item.refs << Ref.new(:full_reference => reference, :user_submitted => true, :published => 1, :visibility => Visibility.visible)  
+            end            
+          end
+        end
+      end
       respond_to do |format|
         format.js do
           # Sorry this is confusing, but we don't know which attribute number will have the id:
@@ -450,6 +493,11 @@ private
     @site_column_class = 'copy' # TODO - why?! (This was a HR thing.)
     @editing = true # TODO - there's a more elegant way to handle the difference in the layout...
     @head_title = I18n.t(:edit_collection_head_title, :collection_name => @collection.name) unless @collection.blank?
+    @references = ''
+    @collection.refs.each do |ref|      
+      @references = @references + "\n" unless @references==''
+      @references = @references + ref.full_reference      
+    end    
   end
 
   def set_sort_options

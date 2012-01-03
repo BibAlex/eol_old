@@ -6,9 +6,16 @@ xml.response do
     xml.name @collection.name
     xml.description @collection.description
     xml.logo_url @collection.logo_cache_url.blank? ? nil : @collection.logo_url
+    xml.date @collection.collection_date
     xml.created @collection.created_at
     xml.modified @collection.updated_at
     xml.total_items @collection_results.total_entries
+    
+    xml.references do
+   	  @collection.refs.each do |ref|
+   	  	xml.reference ref.full_reference
+   	  end
+    end
     
     xml.item_types do
       ['TaxonConcept', 'Text', 'Video', 'Image', 'Sound', 'Community', 'User', 'Collection'].each do |facet|
@@ -18,7 +25,7 @@ xml.response do
         end
       end
     end
-    
+        
     xml.collection_items do
       @collection_results.each do |r|
         xml.item do
@@ -27,6 +34,7 @@ xml.response do
           xml.name r['title']
           xml.object_id ci.object_id
           xml.title ci.name
+          xml.date ci.collection_item_date
           xml.created ci.created_at
           xml.updated ci.updated_at
           xml.annotation ci.annotation
@@ -43,6 +51,12 @@ xml.response do
               xml.source ci.object.thumb_or_object(:orig)
             end
           end
+          
+          xml.references do
+	   	    ci.refs.each do |ref|
+	   	  	  xml.reference ref.full_reference
+	   	    end
+	      end
           
           xml.object_type object_type
         end

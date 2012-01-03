@@ -25,6 +25,7 @@ class Collection < ActiveRecord::Base
 
   has_and_belongs_to_many :communities, :uniq => true
   has_and_belongs_to_many :users
+  has_and_belongs_to_many :refs
 
   named_scope :published, :conditions => {:published => 1}
 

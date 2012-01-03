@@ -4,6 +4,10 @@
     = item_form.label :annotation
     = item_form.text_area :annotation
     = item_form.load_minimal_tags_allowed
+    = item_form.label :collection_item_date
+    = item_form.text_field :collection_item_date
+    = item_form.label :refs
+    = text_area_tag 'references', @references
     - # TODO: figure out why I18n is not getting the label value automatically for sort_field: label value should override attribute value.
     = item_form.label :sort_field, I18n.t('helpers.label.collection_item.sort_field')
     = item_form.text_field :sort_field

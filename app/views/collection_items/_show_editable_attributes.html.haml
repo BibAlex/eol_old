@@ -1,3 +1,12 @@
+- if collection_item.collection_item_date
+  .annotation
+    %p= I18n.t(:date_caps) + ": " + collection_item.collection_item_date.to_s unless collection_item.collection_item_date.nil?
+- unless collection_item.refs.blank?  
+  = I18n.t :references_cabs
+  - collection_item.refs.each do |ref|
+    %br
+    = link_to ref.full_reference, ref.full_reference
+
 - if collection_item.annotation
   .annotation
     %p= collection_item.annotation

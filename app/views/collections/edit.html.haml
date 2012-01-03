@@ -20,6 +20,18 @@
         = f.text_area :description, :value => @collection.description, :rows => 3, :cols => 60
         = f.load_minimal_tags_allowed
       %dt
+        = f.label :additional_annotation_fields
+      %dd
+        = check_box_tag 'has_date', 'yes', @collection.collection_date.present?
+        = f.label :collection_date
+      %dd
+        = f.text_field :collection_date
+      %dd
+        = check_box_tag 'has_refs', 'yes', @references.present?
+        = f.label :refs
+      %dd
+        = text_area_tag 'references', @references
+      %dt
         = f.label :sort_style_id
       %dd
         = f.select :sort_style_id, @sort_options.map {|so| [so.name, so.id]}
