@@ -38,6 +38,9 @@ module EOL
         results = WillPaginate::Collection.create(options[:page], options[:per_page], total_results) do |pager|
            pager.replace(results)
         end
+        if results.length == 0
+          results.total_entries = 0
+        end
         results
       end
 
@@ -53,7 +56,7 @@ module EOL
         # activity logs until we have the result set we want, or until there are no more results
         while docs_to_return.length < 6
           response = solr_search('*:*', options)
-          total_results = response['grouped'][options[:group_field]]['ngroups']
+	  total_results = response['grouped'][options[:group_field]]['ngroups']
           break if total_results == 0
           results = []
           response['grouped'][options[:group_field]]['groups'].each do |g|
@@ -90,15 +93,15 @@ module EOL
         EOL::Solr.add_standard_instance_to_docs!(Comment,
           docs.select{ |d| d['activity_log_type'] == 'Comment' }, 'activity_log_id',
           :includes => [ :user ],
-          :selects => { :comments => '*', :users => '*' })
+          :selects => { :comments => '*', :users => '*', :curator_levels => '*' })
         EOL::Solr.add_standard_instance_to_docs!(CollectionActivityLog,
           docs.select{ |d| d['activity_log_type'] == 'CollectionActivityLog' }, 'activity_log_id',
           :includes => [ :user, :collection, :collection_item ],
-          :selects => { :collection_activity_logs => '*', :users => '*', :collections => '*', :collection_items => '*' })
+          :selects => { :collection_activity_logs => '*', :users => '*', :collections => '*', :collection_items => '*', :curator_levels => '*' })
         EOL::Solr.add_standard_instance_to_docs!(CuratorActivityLog,
           docs.select{ |d| d['activity_log_type'] == 'CuratorActivityLog' }, 'activity_log_id',
           :includes => [ { :hierarchy_entry => [ :name, :taxon_concept ] }, :user, :untrust_reasons ],
-          :selects => { :curator_activity_logs => '*', :names => [ :string ], :users => '*', :untrust_reasons => '*' })
+          :selects => { :curator_activity_logs => '*', :names => [ :string ], :users => '*', :untrust_reasons => '*', :curator_levels => '*' })
         EOL::Solr.add_standard_instance_to_docs!(CommunityActivityLog,
           docs.select{ |d| d['activity_log_type'] == 'CommunityActivityLog' }, 'activity_log_id')
         EOL::Solr.add_standard_instance_to_docs!(UsersDataObject,
@@ -108,7 +111,7 @@ module EOL
             { :taxon_concept => :published_hierarchy_entries },
             :user ],
           :selects => { :data_objects => '*', :taxon_concepts => [ :id ],
-            :hierarchy_entries => '*', :users => '*' })
+            :hierarchy_entries => '*', :users => '*', :curator_levels => '*' })
 
         # remove the activity log (and possibly mess with results per page and pagination)
         # if the referenced object doesn't exist
@@ -119,10 +122,14 @@ module EOL
       end
 
       def self.solr_search(query, options = {})
+        options[:sort_by] ||= 'date_created+desc'
         options[:group_field] ||= 'activity_log_unique_key'
         url =  $SOLR_SERVER + $SOLR_ACTIVITY_LOGS_CORE + '/select/?wt=json&q=' + CGI.escape(%Q[{!lucene}])
         url << CGI.escape(query)
-        url << '&sort=date_created+desc&fl=activity_log_type,activity_log_id,user_id,date_created'
+        unless options[:specific_time].blank?
+          url << "&fq=date_created:[NOW/DAY-7DAY+TO+NOW/DAY%2B1DAY]"
+        end
+        url << "&sort=#{options[:sort_by]}&fl=activity_log_type,activity_log_id,user_id,date_created"
         url << "&group=true&group.field=#{options[:group_field]}&group.ngroups=true"
 
         # add paging

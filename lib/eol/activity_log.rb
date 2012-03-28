@@ -13,9 +13,9 @@ module EOL
       find_activities(klass, source, options)
     end
 
-    def self.global(max = 0)
+    def self.global(max = 0, klass = nil)
       max = $ACTIVITIES_ON_HOME_PAGE if max <= 0
-      return find(nil, :per_page => max)
+      return find(klass, :per_page => max)
     end
 
     def self.find_activities(klass, source, options = {})
@@ -24,6 +24,8 @@ module EOL
       case klass
       when nil
         global_activities(options)
+      when "RecentActivitiesController"
+	recent_activities(options)
       when "User"
         if options[:news]
           user_news_activities(source, options)
@@ -41,6 +43,26 @@ module EOL
       else # Anything else that you make loggable will track comments and ONLY comments:
         other_activities(source, options)
       end
+    end
+
+    def self.recent_activities(options = {})
+      query = "*:*"
+      if options[:filter]
+        if options[:filter].include? ('comments')
+          query = "activity_log_type:Comment"
+        elsif options[:filter].include? ('data_object_curation')
+          query = "activity_log_type:CuratorActivityLog AND feed_type_affected:DataObject"
+        elsif options[:filter].include? ('names')
+          query = "activity_log_type:CuratorActivityLog AND feed_type_affected:Synonym"
+        elsif options[:filter].include? ('added_data_objects')
+          query = "activity_log_type:UsersDataObject"
+        elsif options[:filter].include? ('collections')
+          query = "activity_log_type:CollectionActivityLog"
+        elsif options[:filter].include? ('communities')
+          query = "activity_log_type:CommunityActivityLog"
+        end
+      end
+      results =  EOL::Solr::ActivityLog.search_with_pagination(query, options)
     end
 
     def self.global_activities(options = {})
