@@ -93,15 +93,15 @@ module EOL
         EOL::Solr.add_standard_instance_to_docs!(Comment,
           docs.select{ |d| d['activity_log_type'] == 'Comment' }, 'activity_log_id',
           :includes => [ :user ],
-          :selects => { :comments => '*', :users => '*', :curator_levels => '*' })
+          :selects => { :comments => '*', :users => '*' })
         EOL::Solr.add_standard_instance_to_docs!(CollectionActivityLog,
           docs.select{ |d| d['activity_log_type'] == 'CollectionActivityLog' }, 'activity_log_id',
           :includes => [ :user, :collection, :collection_item ],
-          :selects => { :collection_activity_logs => '*', :users => '*', :collections => '*', :collection_items => '*', :curator_levels => '*' })
+          :selects => { :collection_activity_logs => '*', :users => '*', :collections => '*', :collection_items => '*' })
         EOL::Solr.add_standard_instance_to_docs!(CuratorActivityLog,
           docs.select{ |d| d['activity_log_type'] == 'CuratorActivityLog' }, 'activity_log_id',
           :includes => [ { :hierarchy_entry => [ :name, :taxon_concept ] }, :user, :untrust_reasons ],
-          :selects => { :curator_activity_logs => '*', :names => [ :string ], :users => '*', :untrust_reasons => '*', :curator_levels => '*' })
+          :selects => { :curator_activity_logs => '*', :names => [ :string ], :users => '*', :untrust_reasons => '*' })
         EOL::Solr.add_standard_instance_to_docs!(CommunityActivityLog,
           docs.select{ |d| d['activity_log_type'] == 'CommunityActivityLog' }, 'activity_log_id')
         EOL::Solr.add_standard_instance_to_docs!(UsersDataObject,
@@ -111,7 +111,7 @@ module EOL
             { :taxon_concept => :published_hierarchy_entries },
             :user ],
           :selects => { :data_objects => '*', :taxon_concepts => [ :id ],
-            :hierarchy_entries => '*', :users => '*', :curator_levels => '*' })
+            :hierarchy_entries => '*', :users => '*' })
 
         # remove the activity log (and possibly mess with results per page and pagination)
         # if the referenced object doesn't exist

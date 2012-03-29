@@ -45,7 +45,6 @@ class CommentsController < ApplicationController
       end
       format.js do
         if current_user.can_update?(@comment)
-          puts "inside can update"
           render :partial => 'comments/edit', :locals => { :comment => @comment, :actual_date => actual_date }
         else
           render :text => I18n.t(:comment_edit_by_javascript_not_authorized_error)
